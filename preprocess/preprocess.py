@@ -67,8 +67,7 @@ def connectome_calculator(configs):
     corr_mat = corr_mat.squeeze()
 
     coords = plotting.find_parcellation_cut_coords(atlas.maps)
-    labels = [label.decode('utf-8') for label in atlas.labels]
-    save_results_connectome(corr_mat, coords, labels, configs["edge_threshold"])
+    save_results_connectome(corr_mat, coords, None, configs["edge_threshold"])
 
 
 if __name__ == '__main__':
