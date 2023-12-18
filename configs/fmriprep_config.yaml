@@ -1,0 +1,13 @@
+input_path: "dataset\\ds000030"
+output_path: "dataset\\ds000030\\derivatives"
+
+flags:
+  - "low-mem"
+
+fs-license-file: "dataset\\license.txt"
+
+participant_label:
+  - "sub-10159"
+
+task-id:
+  - "rest"
