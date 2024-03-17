@@ -1,5 +1,0 @@
-func_image_path: "..\\dataset\\ds000030\\derivatives\\sub-10159\\func\\sub-10159_task-rest_space-MNI152NLin2009cAsym_desc-preproc_bold.nii.gz"
-
-atlas_n_rois: 400
-connectivity_measure_type: "correlation"
-edge_threshold: "90%"

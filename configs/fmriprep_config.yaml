@@ -1,10 +1,10 @@
-input_path: "dataset\\ds000030"
-output_path: "dataset\\ds000030\\derivatives"
+input_path: "data\\ds000030"
+output_path: "data\\ds000030\\derivatives"
 
 flags:
   - "low-mem"
 
-fs-license-file: "dataset\\license.txt"
+fs-license-file: "data\\license.txt"
 
 participant_label:
   - "sub-10159"
