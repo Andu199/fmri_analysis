@@ -91,7 +91,6 @@ class UCLA_LA5c_Dataset(torch.utils.data.Dataset):
         else:
             raise ValueError("Unexpected atlas type in config!")
 
-
         # BIDS LAYOUT
         layout = BIDSLayout(self.config["derivatives_dir"], validate=False, config=['bids', 'derivatives'])
 
