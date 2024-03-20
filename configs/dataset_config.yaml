@@ -15,7 +15,7 @@ clean_arguments:
 
   confounds:  # based on the classification made by fMRIPrep team (https://fmriprep.org/en/stable/outputs.html#confounds)
     - basic_confounds  # 9 parameters, 6 rigid-body + 3 global signals
-    - derivatives_of_basic  # derivatives for the basic confounds
+  #  - derivatives_of_basic  # derivatives for the basic confounds
   #  - power_2_basic  # power two of the basic + derivatives
   #  - outlier_detection
   #  - cosine_basis
@@ -26,5 +26,5 @@ atlas_type: yeo
 atlas_args:
   type: "thick_17"
 
-connectivity_measure_type: "correlation"
+connectivity_measure_type: "correlation"  # multiple or 'none'. If 'none', the initial time series matrix will be returned
 edge_threshold: 0.9  # 90% correlation and above is considered

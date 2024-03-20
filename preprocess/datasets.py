@@ -1,16 +1,16 @@
 import os
 from argparse import ArgumentParser
+from copy import deepcopy
 
-import matplotlib
 import nilearn
+import numpy as np
 import pandas as pd
-import seaborn as sns
 import torch.utils.data
 from bids import BIDSLayout
-from matplotlib import pyplot as plt
-from nilearn import datasets, plotting, input_data
+from nilearn import input_data
 from nilearn.connectome import ConnectivityMeasure
-from nilearn.image import image, load_img
+from nilearn.image import load_img
+from torch.utils.data import DataLoader
 
 from preprocess.constants import CONFOUNDS_DICT
 from utils.general_utils import config_parser
@@ -26,7 +26,6 @@ class UCLA_LA5c_Dataset(torch.utils.data.Dataset):
         self.all_columns_confounds = []
 
         self.preprocess_data()
-
 
     def preprocess_subject_info(self, layout, sub_id):
         func_files = layout.get(subject=sub_id,
@@ -52,16 +51,26 @@ class UCLA_LA5c_Dataset(torch.utils.data.Dataset):
         confounds = confounds[self.config["clean_arguments"]["tr_drop"]:, :]
 
         func_img = load_img(func_files[0])
-        func_img = func_img[:, :, :, self.config["clean_arguments"]["tr_drop"]:]
+        func_img = func_img.slicer[:, :, :, self.config["clean_arguments"]["tr_drop"]:]
 
-        masker = input_data.NiftiLabelsMasker(labels_img=self.atlas,
+        masker = input_data.NiftiLabelsMasker(labels_img=deepcopy(self.atlas),
                                               standardize=self.config["clean_arguments"]["standardize"],
                                               detrend=self.config["clean_arguments"]["detrend"],
                                               low_pass=self.config["clean_arguments"]["low_pass"],
                                               high_pass=self.config["clean_arguments"]["high_pass"],
                                               t_r=self.config["clean_arguments"]["t_r"]
                                               )
-        cleaned_img = masker.fit_transform(func_img, confounds)
+        cleaned_partial_img = masker.fit_transform(func_img, confounds)
+
+        # fill for the missing labels
+        cleaned_img = np.zeros((cleaned_partial_img.shape[0], len(np.unique(self.atlas.get_fdata().astype(int)))))
+        cleaned_img[:, np.array(masker.labels_).astype(int)] = cleaned_partial_img
+
+        if self.config["connectivity_measure_type"] == 'none':
+            return cleaned_img
+        else:
+            measure = ConnectivityMeasure(kind=self.config["connectivity_measure_type"])
+            return measure.fit_transform([cleaned_img])[0]
 
     def preprocess_data(self):
         print("Parsing and preprocessing all data..")
@@ -76,7 +85,7 @@ class UCLA_LA5c_Dataset(torch.utils.data.Dataset):
 
         # ATLAS
         if self.config["atlas_type"] == "yeo":
-            self.atlas = nilearn.datasets.fetch_atlas_yeo_2011()[self.config["atlas_args"]["type"]]
+            self.atlas = load_img(nilearn.datasets.fetch_atlas_yeo_2011()[self.config["atlas_args"]["type"]])
         elif self.config["atlas_type"] == "schaefer":
             self.atlas = nilearn.datasets.fetch_atlas_schaefer_2018(n_rois=self.config["atlas_args"]["n_rois"])
         else:
@@ -94,14 +103,18 @@ class UCLA_LA5c_Dataset(torch.utils.data.Dataset):
             raise ValueError("Incorrect type of subject list in config")
 
         # ACTUAL IMAGE DATA
+        list_subs_to_remove = []
         for sub_id in self.sub_names_list:
             info = self.preprocess_subject_info(layout, sub_id)
             if info is None:
                 # Remove subject from the list
-                self.sub_names_list.remove(sub_id)
+                list_subs_to_remove.append(sub_id)
                 continue
 
             self.sub_data[sub_id] = info
+
+        for sub_id in list_subs_to_remove:
+            self.sub_names_list.remove(sub_id)
 
         print("Preprocessing done!")
 
@@ -109,10 +122,13 @@ class UCLA_LA5c_Dataset(torch.utils.data.Dataset):
         return len(self.sub_names_list)
 
     def __getitem__(self, item):
-        # TODO: return also some information regarding the class (either subject id or the actual class)
-        return self.sub_data[self.sub_names_list[item]]
+        return self.sub_data[self.sub_names_list[item]], self.sub_names_list[item]
 
 
 if __name__ == '__main__':
     dataset_config = config_parser(ArgumentParser("Run this only for test purposes!"))
     dataset = UCLA_LA5c_Dataset(dataset_config)
+    dataloader = DataLoader(dataset, batch_size=2)
+    for batch_idx, batch in enumerate(dataloader):
+        print(batch_idx)
+        print(batch)
