@@ -1,0 +1,28 @@
+# Read arguments
+derivatives_dir: "../data/ds000030/derivatives/"
+subjects: "ALL"  # a list or 'ALL'. If 'ALL', all will be read.
+task: 'rest'
+
+# Clean arguments
+clean_arguments:
+  high_pass: 0.009
+  low_pass: 0.08
+  t_r: 2
+  detrend: True
+  standardize: True
+  tr_drop: 4
+
+  confounds:  # based on the classification made by fMRIPrep team (https://fmriprep.org/en/stable/outputs.html#confounds)
+    - basic_confounds  # 9 parameters, 6 rigid-body + 3 global signals
+  #  - derivatives_of_basic  # derivatives for the basic confounds
+  #  - power_2_basic  # power two of the basic + derivatives
+  #  - outlier_detection
+  #  - cosine_basis
+  #  - compcor
+
+# Atlas arguments
+atlas_type: yeo
+atlas_args:
+  type: "thick_17"
+
+output_path: "../outputs/dataset_yeo17thick_2024_03_21.pkl"

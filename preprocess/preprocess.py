@@ -1,31 +1,36 @@
 import os
+import pickle
 from argparse import ArgumentParser
 from copy import deepcopy
 
 import nilearn
 import numpy as np
 import pandas as pd
-import torch.utils.data
 from bids import BIDSLayout
 from nilearn import input_data
-from nilearn.connectome import ConnectivityMeasure
 from nilearn.image import load_img
-from torch.utils.data import DataLoader
 
-from preprocess.constants import CONFOUNDS_DICT
+from utils.constants import CONFOUNDS_DICT
 from utils.general_utils import config_parser
 
 
-class UCLA_LA5c_Dataset(torch.utils.data.Dataset):
-    def __init__(self, config):
-        super().__init__()
-        self.config = config
+class Container:
+    def __init__(self):
         self.sub_names_list = []
         self.sub_data = {}
+
+
+class Preprocessor:
+    def __init__(self, config):
+        self.config = config
+        self.container = Container()
         self.atlas = None
         self.all_columns_confounds = []
 
+    def preprocess(self):
         self.preprocess_data()
+        with open(self.config["output_path"], "wb") as f:
+            pickle.dump(self.container, f)
 
     def preprocess_subject_info(self, layout, sub_id):
         func_files = layout.get(subject=sub_id,
@@ -66,11 +71,7 @@ class UCLA_LA5c_Dataset(torch.utils.data.Dataset):
         cleaned_img = np.zeros((cleaned_partial_img.shape[0], len(np.unique(self.atlas.get_fdata().astype(int)))))
         cleaned_img[:, np.array(masker.labels_).astype(int)] = cleaned_partial_img
 
-        if self.config["connectivity_measure_type"] == 'none':
-            return cleaned_img
-        else:
-            measure = ConnectivityMeasure(kind=self.config["connectivity_measure_type"])
-            return measure.fit_transform([cleaned_img])[0]
+        return cleaned_img
 
     def preprocess_data(self):
         print("Parsing and preprocessing all data..")
@@ -95,39 +96,31 @@ class UCLA_LA5c_Dataset(torch.utils.data.Dataset):
         layout = BIDSLayout(self.config["derivatives_dir"], validate=False, config=['bids', 'derivatives'])
 
         if isinstance(self.config["subjects"], str) and self.config["subjects"] == "ALL":
-            self.sub_names_list = [filename.split("-")[1] for filename in os.listdir(self.config["derivatives_dir"])]
+            self.container.sub_names_list = [filename.split("-")[1]
+                                             for filename in os.listdir(self.config["derivatives_dir"])]
         elif isinstance(self.config["subjects"], list):
-            self.sub_names_list = self.config["subjects"]
+            self.container.sub_names_list = self.config["subjects"]
         else:
             raise ValueError("Incorrect type of subject list in config")
 
         # ACTUAL IMAGE DATA
         list_subs_to_remove = []
-        for sub_id in self.sub_names_list:
+        for sub_id in self.container.sub_names_list:
             info = self.preprocess_subject_info(layout, sub_id)
             if info is None:
                 # Remove subject from the list
                 list_subs_to_remove.append(sub_id)
                 continue
 
-            self.sub_data[sub_id] = info
+            self.container.sub_data[sub_id] = info
 
         for sub_id in list_subs_to_remove:
-            self.sub_names_list.remove(sub_id)
+            self.container.sub_names_list.remove(sub_id)
 
         print("Preprocessing done!")
 
-    def __len__(self):
-        return len(self.sub_names_list)
-
-    def __getitem__(self, item):
-        return self.sub_data[self.sub_names_list[item]], self.sub_names_list[item]
-
 
 if __name__ == '__main__':
-    dataset_config = config_parser(ArgumentParser("Run this only for test purposes!"))
-    dataset = UCLA_LA5c_Dataset(dataset_config)
-    dataloader = DataLoader(dataset, batch_size=2)
-    for batch_idx, batch in enumerate(dataloader):
-        print(batch_idx)
-        print(batch)
+    preprocess_config = config_parser(ArgumentParser("Script used to preprocess a dataset!"))
+    preprocessor = Preprocessor(preprocess_config)
+    preprocessor.preprocess()
