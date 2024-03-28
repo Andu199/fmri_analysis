@@ -9,6 +9,7 @@ from torch.utils.data import DataLoader
 
 from models.NormativeModel import NormativeModel
 from models.datasets import UCLA_LA5c_Dataset
+from preprocess.preprocess import Container
 from utils.general_utils import config_parser
 
 
@@ -32,7 +33,7 @@ def init_train(config):
     train_dl = DataLoader(train_dataset, batch_size=config["batch_size"], shuffle=True)
     val_dl = DataLoader(val_dataset, batch_size=config["batch_size"], shuffle=False)
 
-    logger_path = os.path.join("../outputs", config["model_name"], "logs")
+    logger_path = os.path.join("outputs", config["model_name"], "logs")
     if config["logger"] == "tensorboard":
         logger = TensorBoardLogger(logger_path, name="my_experiment")
     elif config["logger"] == "csv":
@@ -40,7 +41,7 @@ def init_train(config):
     else:
         raise ValueError(config["logger"] + " not yer implemented!")
 
-    ckpts_path = os.path.join("../outputs", config["model_name"], "ckpts")
+    ckpts_path = os.path.join("outputs", config["model_name"], "ckpts")
     checkpoint_callback = ModelCheckpoint(
         monitor=config["ckpt_args"]["metric"],
         dirpath=ckpts_path,

@@ -11,15 +11,15 @@ input_areas: 18
 
 # DATASETS
 dataset_name: ucla
-train_path: "../data/dataset_yeo17thick_2024_03_21.pkl"
-val_path: "../data/dataset_yeo17thick_2024_03_21.pkl"
+train_path: "data/data_28_03_2024/dataset_yeo17thick_2024_03_28_h_train.pkl"
+val_path: "data/data_28_03_2024/dataset_yeo17thick_2024_03_28_h_val.pkl"
 connectivity_measure_type: "correlation"  # multiple or 'none'. If 'none', the initial time series matrix will be returned
 edge_threshold: 0.9  # 90% correlation and above is considered
-batch_size: 32
+batch_size: 4
 
 # TRAINER
-logger: tensorboard  # csv
-max_epochs: 100
+logger: tensorboard  # csv, tensorboard
+max_epochs: 1000
 ckpt_args:
-  metric: "val_loss"
+  metric: "val_mse_loss"
   mode: "min"

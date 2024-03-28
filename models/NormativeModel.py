@@ -34,14 +34,16 @@ class NormativeModel(L.LightningModule):
     def training_step(self, batch, batch_idx):
         x, _ = batch
         pred = self.forward(x)
-        loss = torch.nn.functional.mse_loss(pred, x)  # reconstruction error
+        y = x[:, self.mask]
+        loss = torch.nn.functional.mse_loss(pred, y)  # reconstruction error
         self.log("train_mse_loss", loss)
         return loss
 
     def validation_step(self, batch, batch_idx):
         x, _ = batch
         pred = self.forward(x)
-        loss = torch.nn.functional.mse_loss(pred, x)  # reconstruction error
+        y = x[:, self.mask]
+        loss = torch.nn.functional.mse_loss(pred, y)  # reconstruction error
         self.log("val_mse_loss", loss)
 
     def configure_optimizers(self):

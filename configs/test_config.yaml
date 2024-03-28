@@ -1,0 +1,26 @@
+# MODEL
+model_name: normative
+model_path: "outputs/normative/ckpts/model-epoch=808.ckpt"
+fc_hidden_size:
+  - 77  # ~153 / 2; (18**2 - 18) / 2 = 153
+  - 25  # ~77 / 3
+  - 77
+activation: "leaky_relu"
+norm_layer: "none"
+dropout_prob: 0.5
+input_areas: 18
+
+
+# DATASET
+ds_paths:
+  healthy: "data/data_28_03_2024/dataset_yeo17thick_2024_03_28_h_test.pkl"
+  schz: "data/data_28_03_2024/dataset_yeo17thick_2024_03_28_schz_test.pkl"
+  bipolar: "data/data_28_03_2024/dataset_yeo17thick_2024_03_28_bipolar_test.pkl"
+  adhd: "data/data_28_03_2024/dataset_yeo17thick_2024_03_28_adhd_test.pkl"
+
+dataset_name: "ucla"
+connectivity_measure_type: "correlation"  # multiple or 'none'. If 'none', the initial time series matrix will be returned
+edge_threshold: 0.9  # 90% correlation and above is considered
+batch_size: 4
+
+metric: "mse"
