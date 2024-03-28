@@ -1,7 +1,8 @@
 fc_hidden_size:
-  - 77  # ~153 / 2
+  - 77  # ~153 / 2; (18**2 - 18) / 2 = 153
   - 25  # ~77 / 3
   - 77
 activation: "leaky_relu"
 norm_layer: "none"
 dropout_prob: 0.5
+input_areas: 18
