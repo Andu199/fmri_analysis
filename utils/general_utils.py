@@ -1,6 +1,27 @@
 import os
 
+import dtw
+import numpy as np
 import yaml
+
+
+class ConnectivityDTW:
+    def __init__(self):
+        pass
+
+    def fit_transform(self, x_list):
+        x = x_list[0]
+        x = x.T
+
+        connectivity_matrix = np.zeros((x.shape[0], x.shape[0]))
+        for i in range(x.shape[0]):
+            for j in range(i + 1):
+                dist = dtw.dtw(x[i], x[j], distance_only=True).distance
+                similarity = 1 / (1 + dist)
+                connectivity_matrix[i, j] = similarity
+                connectivity_matrix[j, i] = similarity
+
+        return np.array([connectivity_matrix]).astype(np.float32)
 
 
 def config_parser(parser):

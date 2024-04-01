@@ -8,7 +8,7 @@ from torch.utils.data import DataLoader
 
 from preprocess.preprocess import Container
 from utils.constants import Diagnostic
-from utils.general_utils import config_parser
+from utils.general_utils import config_parser, ConnectivityDTW
 
 
 class UCLA_LA5c_Dataset(torch.utils.data.Dataset):
@@ -21,8 +21,10 @@ class UCLA_LA5c_Dataset(torch.utils.data.Dataset):
 
         if self.config["connectivity_measure_type"] == 'none':
             self.connectivity_measure = None
-        else:
+        elif self.config["connectivity_measure_type"] == 'correlation':
             self.connectivity_measure = ConnectivityMeasure(kind=self.config["connectivity_measure_type"])
+        elif self.config["connectivity_measure_type"] == 'dtw':
+            self.connectivity_measure = ConnectivityDTW()
 
     def __len__(self):
         return len(self.container.sub_names_list)

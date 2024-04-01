@@ -1,25 +1,25 @@
 # MODEL
 model_name: normative
 fc_hidden_size:
-  - 77  # ~153 / 2; (18**2 - 18) / 2 = 153
-  - 25  # ~77 / 3
-  - 77
+  - 68  # ~136 / 2; (18**2 - 18) / 2 = 136
+  - 23  # ~68 / 3
+  - 68
 activation: "leaky_relu"
 norm_layer: "none"
 dropout_prob: 0.5
-input_areas: 18
+input_areas: 17
 
 # DATASETS
 dataset_name: ucla
-train_path: "data/data_28_03_2024/dataset_yeo17thick_2024_03_28_h_train.pkl"
-val_path: "data/data_28_03_2024/dataset_yeo17thick_2024_03_28_h_val.pkl"
-connectivity_measure_type: "correlation"  # multiple or 'none'. If 'none', the initial time series matrix will be returned
+train_path: "data/data_31_03_2024/dataset_yeo17thick_2024_03_31_h_train.pkl"
+val_path: "data/data_31_03_2024/dataset_yeo17thick_2024_03_31_h_test.pkl"
+connectivity_measure_type: "dtw"  # multiple or 'none'. If 'none', the initial time series matrix will be returned
 edge_threshold: 0.9  # 90% correlation and above is considered
 batch_size: 4
 
 # TRAINER
 logger: tensorboard  # csv, tensorboard
-max_epochs: 1000
+max_epochs: 5000
 ckpt_args:
   metric: "val_mse_loss"
   mode: "min"

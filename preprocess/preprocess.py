@@ -71,6 +71,9 @@ class Preprocessor:
         cleaned_img = np.zeros((cleaned_partial_img.shape[0], len(np.unique(self.atlas.get_fdata().astype(int)))))
         cleaned_img[:, np.array(masker.labels_).astype(int)] = cleaned_partial_img
 
+        # Remove the background information
+        cleaned_img = cleaned_img[:, 1:]
+
         return cleaned_img
 
     def preprocess_data(self):
