@@ -3,6 +3,9 @@ import os
 if __name__ == "__main__":
     data_dir = "../data/ds000030_R1.0.4/derivatives/fmriprep"
     for dirname in os.listdir(data_dir):
+        if dirname.endswith(".html"):
+            os.remove(os.path.join(data_dir, dirname))
+            continue
         dir_anat = os.path.join(data_dir, dirname, "anat")
         for filename in os.listdir(dir_anat):
             if "MNI152NLin2009cAsym" not in filename:
