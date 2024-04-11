@@ -11,9 +11,9 @@ input_areas: 17
 
 # DATASETS
 dataset_name: ucla
-train_path: "data/data_31_03_2024/dataset_yeo17thick_2024_03_31_h_train.pkl"
-val_path: "data/data_31_03_2024/dataset_yeo17thick_2024_03_31_h_test.pkl"
-connectivity_measure_type: "dtw"  # multiple or 'none'. If 'none', the initial time series matrix will be returned
+train_path: "data/processed/data_11_04_2024/dataset_yeo17thick_2024_04_11_h_train.pkl"
+val_path: "data/processed/data_11_04_2024/dataset_yeo17thick_2024_04_11_h_test.pkl"
+connectivity_measure_type: "correlation"  # multiple or 'none'. If 'none', the initial time series matrix will be returned
 edge_threshold: 0.9  # 90% correlation and above is considered
 batch_size: 4
 

@@ -114,10 +114,10 @@ def test(config):
 
     pd.DataFrame(
         np.array(list(overall_metric_results.values())).reshape(1, -1), columns=list(overall_metric_results.keys())
-    ).to_csv("outputs/normative/test/version_1/evaluation_overall.csv", index=False)
+    ).to_csv("outputs/evaluation_overall.csv", index=False)
     pd.DataFrame(
         np.array(list(per_connection_metric_results.values())).T, columns=list(per_connection_metric_results.keys())
-    ).to_csv("outputs/normative/test/version_1/evaluation_per_connection.csv", index=False)
+    ).to_csv("outputs/evaluation_per_connection.csv", index=False)
     plot_reconstructions(per_connection_metric_results)
 
 

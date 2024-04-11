@@ -1,6 +1,6 @@
 # MODEL
 model_name: normative
-model_path: "outputs/normative/ckpts/version_1_best_models/model-epoch=258.ckpt"
+model_path: "outputs/normative/ckpts/version_2_best_models/model-epoch=4680.ckpt"
 fc_hidden_size:
   - 68  # ~136 / 2; (18**2 - 18) / 2 = 136
   - 23  # ~68 / 3
@@ -13,13 +13,13 @@ input_areas: 17
 
 # DATASET
 ds_paths:
-  healthy: "data/data_31_03_2024/dataset_yeo17thick_2024_03_31_h_test.pkl"
-  schz: "data/data_31_03_2024/dataset_yeo17thick_2024_03_31_schz_test.pkl"
-  bipolar: "data/data_31_03_2024/dataset_yeo17thick_2024_03_31_bipolar_test.pkl"
-  adhd: "data/data_31_03_2024/dataset_yeo17thick_2024_03_31_adhd_test.pkl"
+  healthy: "data/processed/data_11_04_2024/dataset_yeo17thick_2024_04_11_h_test.pkl"
+  schz: "data/processed/data_11_04_2024/dataset_yeo17thick_2024_04_11_schz_test.pkl"
+  bipolar: "data/processed/data_11_04_2024/dataset_yeo17thick_2024_04_11_bipolar_test.pkl"
+  adhd: "data/processed/data_11_04_2024/dataset_yeo17thick_2024_04_11_adhd_test.pkl"
 
 dataset_name: "ucla"
-connectivity_measure_type: "dtw"  # multiple or 'none'. If 'none', the initial time series matrix will be returned
+connectivity_measure_type: "correlation"  # multiple or 'none'. If 'none', the initial time series matrix will be returned
 edge_threshold: 0.9  # 90% correlation and above is considered
 batch_size: 4
 

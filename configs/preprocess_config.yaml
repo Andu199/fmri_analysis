@@ -25,4 +25,4 @@ atlas_type: yeo
 atlas_args:
   type: "thick_17"
 
-output_path: "../outputs/dataset_yeo17thick_2024_03_21.pkl"
+output_path: "../outputs/dataset_yeo17thick_2024_04_11_h_train.pkl"
