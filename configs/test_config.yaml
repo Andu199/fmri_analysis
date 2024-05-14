@@ -21,6 +21,6 @@ ds_paths:
 dataset_name: "ucla"
 connectivity_measure_type: "correlation"  # multiple or 'none'. If 'none', the initial time series matrix will be returned
 edge_threshold: 0.9  # 90% correlation and above is considered
-batch_size: 4
+batch_size: 1
 
 metric: "mae"

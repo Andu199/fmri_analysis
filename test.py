@@ -76,11 +76,11 @@ def plot_reconstructions(per_connection_metric_results):
         plt.savefig(f"outputs/heatmap_{name}_wo_subtraction.png")
         plt.clf()
 
-    # Plot wiht subtraction
+    mean_healthy = np.mean([all_matrices[key] for key in all_matrices.keys() if "healthy" in key], axis=0)
+
+    # Plot with subtraction
     for name, matrix in all_matrices.items():
-        if name == "healthy":
-            continue
-        matrix -= all_matrices["healthy"]
+        matrix -= mean_healthy
         sns.heatmap(matrix)
         plt.savefig(f"outputs/heatmap_{name}_with_subtraction.png")
         plt.clf()
@@ -89,15 +89,16 @@ def plot_reconstructions(per_connection_metric_results):
 def test(config):
     model, dataloaders, overall_metric, per_connection_metrics = init_test(config)
     overall_metric_results = {}
-    per_connection_metric_results = {name: [] for name in dataloaders.keys()}
+    per_connection_metric_results = {}
 
     for name, dl in dataloaders.items():
         overall_metric.reset()
-        for metric in per_connection_metrics:
-            metric.reset()
 
         with torch.no_grad():
-            for x, _ in dl:
+            for id_sub, (x, _) in enumerate(dl):
+                for metric in per_connection_metrics:
+                    metric.reset()
+
                 pred = model(x)
                 y = x[:, model.mask]
 
@@ -105,19 +106,27 @@ def test(config):
                 for idx, metric in enumerate(per_connection_metrics):
                     metric.update(pred[:, idx], y[:, idx])
 
+                per_connection_metric_results[f"{name}_{id_sub}"] = []
+                for metric in per_connection_metrics:
+                    mse_result = metric.compute()
+                    per_connection_metric_results[f"{name}_{id_sub}"].append(mse_result.item())
+
         overall_mse_result = overall_metric.compute()
         overall_metric_results[name] = overall_mse_result.item()
-
-        for metric in per_connection_metrics:
-            mse_result = metric.compute()
-            per_connection_metric_results[name].append(mse_result.item())
 
     pd.DataFrame(
         np.array(list(overall_metric_results.values())).reshape(1, -1), columns=list(overall_metric_results.keys())
     ).to_csv("outputs/evaluation_overall.csv", index=False)
-    pd.DataFrame(
+
+    df = pd.DataFrame(
         np.array(list(per_connection_metric_results.values())).T, columns=list(per_connection_metric_results.keys())
-    ).to_csv("outputs/evaluation_per_connection.csv", index=False)
+    )
+    networks = ['vis_1', 'vis_2', 'mot_1', 'mot_2', 'dan_2', 'dan_1', 'van_1', 'fp_1', 'lim_1', 'lim_2', 'fp_2', 'fp_3',
+                'fp_4', 'mot_3', 'dmn_3', 'dmn_1', 'dmn_2']
+    df["connections"] = [f"{networks[i]}_{networks[j]}"
+                         for i in range(len(networks)) for j in range(i)]
+
+    df.to_csv("outputs/evaluation_per_subject_connection.csv", index=False)
     plot_reconstructions(per_connection_metric_results)
 
 
