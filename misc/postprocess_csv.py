@@ -1,8 +1,18 @@
 import os
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from scipy.stats import mannwhitneyu
+
+
+def plot_boxplots(values, connection, disorder, class_names, path):
+    plt.boxplot(values, labels=class_names)
+    plt.xlabel("Disorder")
+    plt.ylabel("Reconstruction Error")
+    plt.title(f"Boxplots for connection: {connection} (biomarker for {disorder})")
+    plt.savefig(os.path.join(os.path.dirname(path), f"boxplot_{disorder}_{connection}.png"))
+    plt.clf()
 
 
 def postprocess(path):
@@ -35,7 +45,20 @@ def postprocess(path):
                 results_total[f"{class_names[j]}_{class_names[i]}"][idx] = result
 
     path_output = os.path.join(os.path.dirname(path), "mannwhitney_test_pvalue.csv")
-    pd.DataFrame(results_total).to_csv(path_output, index=False)
+    results_total = pd.DataFrame(results_total)
+    results_total.to_csv(path_output, index=False)
+
+    disorders = ["schz", "bipolar", "adhd"]
+    for disorder in disorders:
+        abnormal_connections = results_total[results_total[f'healthy_{disorder}'] <= 0.05]['connections'].to_list()
+        for connection in abnormal_connections:
+            row = df[df['connections'] == connection]
+
+            values = []
+            for class_name, columns in classes_columns.items():
+                values.append(row[columns].to_numpy().squeeze(axis=0))
+
+            plot_boxplots(values, connection, disorder, class_names, path)
 
 
 if __name__ == "__main__":
