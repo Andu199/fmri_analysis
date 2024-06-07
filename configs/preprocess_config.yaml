@@ -10,19 +10,19 @@ clean_arguments:
   t_r: 2
   detrend: True
   standardize: True
-  tr_drop: 4
+  tr_drop: 4  # TODO: de verificat valoarea.
 
   confounds:  # based on the classification made by fMRIPrep team (https://fmriprep.org/en/stable/outputs.html#confounds)
     - basic_confounds  # 9 parameters, 6 rigid-body + 3 global signals
   #  - derivatives_of_basic  # derivatives for the basic confounds
   #  - power_2_basic  # power two of the basic + derivatives
-  #  - outlier_detection
+  #  - outlier_detection  # TODO: merita folosite.
   #  - cosine_basis
-  #  - compcor
+  #  - compcor  # TODO: merita folosite.
 
 # Atlas arguments
-atlas_type: yeo
+atlas_type: yeo  # TODO: alt atlas.
 atlas_args:
-  type: "thick_17"
+  type: "thick_17"  # TODO: alta configuratie.
 
 output_path: "../outputs/dataset_yeo17thick_2024_04_11_h_train.pkl"

@@ -50,7 +50,7 @@ def postprocess(path):
 
     disorders = ["schz", "bipolar", "adhd"]
     for disorder in disorders:
-        abnormal_connections = results_total[results_total[f'healthy_{disorder}'] <= 0.05]['connections'].to_list()
+        abnormal_connections = results_total[results_total[f'healthy_{disorder}'] < 0.05]['connections'].to_list()
         for connection in abnormal_connections:
             row = df[df['connections'] == connection]
 

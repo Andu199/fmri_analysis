@@ -58,6 +58,7 @@ class Preprocessor:
         func_img = load_img(func_files[0])
         func_img = func_img.slicer[:, :, :, self.config["clean_arguments"]["tr_drop"]:]
 
+        # TODO: de testat cu img_clean().
         masker = input_data.NiftiLabelsMasker(labels_img=deepcopy(self.atlas),
                                               standardize=self.config["clean_arguments"]["standardize"],
                                               detrend=self.config["clean_arguments"]["detrend"],
