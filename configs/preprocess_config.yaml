@@ -1,5 +1,5 @@
 # Read arguments
-derivatives_dir: "../data/ds000030/derivatives/"
+derivatives_dir: "../data/ds000030/derivatives/preprocess"
 subjects: "ALL"  # a list or 'ALL'. If 'ALL', all will be read.
 task: 'rest'
 
@@ -25,4 +25,4 @@ atlas_type: yeo  # TODO: alt atlas.
 atlas_args:
   type: "thick_17"  # TODO: alta configuratie.
 
-output_path: "../outputs/dataset_yeo17thick_2024_04_11_h_train.pkl"
+output_path: "../data/processed/data_09_07_2024_compcor/dataset_yeo17thick_2024_07_09_h_train.pkl"

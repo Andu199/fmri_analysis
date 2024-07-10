@@ -41,6 +41,14 @@ class Preprocessor:
                                 extension='nii.gz',
                                 return_type='file')
 
+        mask_func_files = layout.get(subject=sub_id,
+                                     datatype='func',
+                                     task=self.config["task"],
+                                     space='MNI152NLin2009cAsym',
+                                     suffix='brainmask',
+                                     extension='nii.gz',
+                                     return_type='file')
+
         confound_files = layout.get(subject=sub_id,
                                     datatype='func',
                                     task=self.config["task"],
@@ -48,7 +56,7 @@ class Preprocessor:
                                     extension="tsv",
                                     return_type='file')
 
-        if len(func_files) != 1 or len(confound_files) != 1:
+        if len(func_files) != 1 or len(confound_files) != 1 or len(mask_func_files) != 1:
             return None
 
         confounds = pd.read_csv(confound_files[0], sep='\t', usecols=self.all_columns_confounds)
@@ -57,9 +65,10 @@ class Preprocessor:
 
         func_img = load_img(func_files[0])
         func_img = func_img.slicer[:, :, :, self.config["clean_arguments"]["tr_drop"]:]
+        func_mask = load_img(mask_func_files[0])
 
-        # TODO: de testat cu img_clean().
         masker = input_data.NiftiLabelsMasker(labels_img=deepcopy(self.atlas),
+                                              mask_img=func_mask,
                                               standardize=self.config["clean_arguments"]["standardize"],
                                               detrend=self.config["clean_arguments"]["detrend"],
                                               low_pass=self.config["clean_arguments"]["low_pass"],

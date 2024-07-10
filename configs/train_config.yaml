@@ -11,15 +11,20 @@ input_areas: 17
 
 # DATASETS
 dataset_name: ucla
-train_path: "data/processed/data_11_04_2024/dataset_yeo17thick_2024_04_11_h_train.pkl"
-val_path: "data/processed/data_11_04_2024/dataset_yeo17thick_2024_04_11_h_test.pkl"
+train_path: "data/processed/data_09_07_2024_compcor/dataset_yeo17thick_2024_07_09_h_train.pkl"
+val_path: "data/processed/data_09_07_2024_compcor/dataset_yeo17thick_2024_07_09_h_test.pkl"
 connectivity_measure_type: "correlation"  # multiple or 'none'. If 'none', the initial time series matrix will be returned
 edge_threshold: 0.9  # 90% correlation and above is considered  # TODO: nefolosit.
 batch_size: 4
 
 # TRAINER
-logger: tensorboard  # csv, tensorboard  # TODO: grafic per epoca (nu iteratie).
-max_epochs: 5000  # TODO: alt criteriu de oprire.
+logger: tensorboard  # csv, tensorboard
+max_epochs: 20000
 ckpt_args:
   metric: "val_mse_loss"
   mode: "min"
+#early_stopping:
+#  metric: "val_mse_loss"
+#  mode: "min"
+#  min_delta: 1e-5
+#  patience: 50

@@ -1,3 +1,4 @@
+import os.path
 from argparse import ArgumentParser
 
 import numpy as np
@@ -53,7 +54,7 @@ def init_test(config):
     return model, dataloaders, overall_metric, per_connection_metrics
 
 
-def plot_reconstructions(per_connection_metric_results):
+def plot_reconstructions(per_connection_metric_results, config):
     all_matrices = {}
     for name, values in per_connection_metric_results.items():
         dim = len(values)
@@ -73,7 +74,7 @@ def plot_reconstructions(per_connection_metric_results):
     # Plot without subtraction
     for name, matrix in all_matrices.items():
         sns.heatmap(matrix)
-        plt.savefig(f"outputs/heatmap_{name}_wo_subtraction.png")
+        plt.savefig(os.path.join(config["output_dir"], "plots",f"heatmap_{name}_wo_subtraction.png"))
         plt.clf()
 
     mean_healthy = np.mean([all_matrices[key] for key in all_matrices.keys() if "healthy" in key], axis=0)
@@ -82,7 +83,7 @@ def plot_reconstructions(per_connection_metric_results):
     for name, matrix in all_matrices.items():
         matrix -= mean_healthy
         sns.heatmap(matrix)
-        plt.savefig(f"outputs/heatmap_{name}_with_subtraction.png")
+        plt.savefig(os.path.join(config["output_dir"], "plots", f"heatmap_{name}_with_subtraction.png"))
         plt.clf()
 
 
@@ -90,6 +91,8 @@ def test(config):
     model, dataloaders, overall_metric, per_connection_metrics = init_test(config)
     overall_metric_results = {}
     per_connection_metric_results = {}
+
+    os.makedirs(os.path.join(config["output_dir"], "plots"), exist_ok=True)
 
     for name, dl in dataloaders.items():
         overall_metric.reset()
@@ -116,7 +119,7 @@ def test(config):
 
     pd.DataFrame(
         np.array(list(overall_metric_results.values())).reshape(1, -1), columns=list(overall_metric_results.keys())
-    ).to_csv("outputs/evaluation_overall.csv", index=False)
+    ).to_csv(os.path.join(config["output_dir"], "evaluation_overall.csv"), index=False)
 
     df = pd.DataFrame(
         np.array(list(per_connection_metric_results.values())).T, columns=list(per_connection_metric_results.keys())
@@ -126,8 +129,8 @@ def test(config):
     df["connections"] = [f"{networks[i]}_{networks[j]}"
                          for i in range(len(networks)) for j in range(i)]
 
-    df.to_csv("outputs/evaluation_per_subject_connection.csv", index=False)
-    plot_reconstructions(per_connection_metric_results)
+    df.to_csv(os.path.join(config["output_dir"], "evaluation_per_subject_connection.csv"), index=False)
+    plot_reconstructions(per_connection_metric_results, config)
 
 
 if __name__ == "__main__":
