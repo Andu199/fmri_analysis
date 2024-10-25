@@ -1,25 +1,51 @@
 import os
+from joblib import Parallel, delayed
 
-import dtw
+from DTW_for_fMRI.dtw_connectivity_parallel import dtw
 import numpy as np
 import yaml
 
 
+def compute_similarity_from_distance(dist, other_params=None, sim_type=0):
+    if sim_type == -1:
+        return dist
+    elif sim_type == 0:
+        return 1 / (1 + dist)
+    elif sim_type == 1:
+        if other_params is None or "lambda" not in other_params or not isinstance(other_params["lambda"], int):
+            raise ValueError("Wrong other_params value!")
+
+        return np.exp(-other_params["lambda"] * dist)
+    else:
+        raise ValueError("Wrong sim_type")
+
+
 class ConnectivityDTW:
-    def __init__(self):
-        pass
+    def __init__(self, sim_type=0, window_size=10, lambda_value=None):
+        self.sim_type = sim_type
+        self.window_size = window_size
+        self.other_params = {
+            "lambda": lambda_value,
+        }
 
     def fit_transform(self, x_list):
         x = x_list[0]
         x = x.T
 
         connectivity_matrix = np.zeros((x.shape[0], x.shape[0]))
-        for i in range(x.shape[0]):
-            for j in range(i + 1):
-                dist = dtw.dtw(x[i], x[j], distance_only=True).distance
-                similarity = 1 / (1 + dist)
-                connectivity_matrix[i, j] = similarity
-                connectivity_matrix[j, i] = similarity
+
+        # Parallelize the DTW calculations
+        def calculate_similarity(i, j):
+            dist = dtw(x[i], x[j], w=self.window_size, scale_with_timeseries_length=True)
+            sim = compute_similarity_from_distance(dist, other_params=self.other_params, sim_type=self.sim_type)
+            return i, j, sim
+
+        results = Parallel(n_jobs=-1)(
+            delayed(calculate_similarity)(i, j) for i in range(x.shape[0]) for j in range(i + 1))
+
+        for i, j, similarity in results:
+            connectivity_matrix[i, j] = similarity
+            connectivity_matrix[j, i] = similarity
 
         return np.array([connectivity_matrix]).astype(np.float32)
 

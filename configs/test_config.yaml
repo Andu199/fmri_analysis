@@ -1,6 +1,6 @@
 # MODEL
 model_name: normative
-model_path: "outputs/normative/ckpts/version_2/model-epoch=3045.ckpt"
+model_path: "outputs/normative/ckpts/version_3/model-epoch=129.ckpt"
 fc_hidden_size:
   - 68  # ~136 / 2; (17**2 - 17) / 2 = 136
   - 23  # ~68 / 3
@@ -19,9 +19,9 @@ ds_paths:
   adhd: "data/processed/data_09_07_2024_compcor/dataset_yeo17thick_2024_07_09_adhd_test.pkl"
 
 dataset_name: "ucla"
-connectivity_measure_type: "correlation"  # multiple or 'none'. If 'none', the initial time series matrix will be returned
+connectivity_measure_type: "dtw"  # multiple or 'none'. If 'none', the initial time series matrix will be returned
 edge_threshold: 0.9  # 90% correlation and above is considered  # TODO: nefolosit.
 batch_size: 1
 
 metric: "mae"
-output_dir: "outputs/normative/test/version_2/"
+output_dir: "outputs/normative/test/version_3/"

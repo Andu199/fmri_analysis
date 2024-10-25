@@ -1,0 +1,3 @@
+[submodule "DTW_for_fMRI"]
+    path = DTW_for_fMRI
+    url = https://github.com/MRegina/DTW_for_fMRI.git

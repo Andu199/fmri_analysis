@@ -62,4 +62,4 @@ def postprocess(path):
 
 
 if __name__ == "__main__":
-    postprocess("../outputs/normative/test/version_2/evaluation_per_subject_connection.csv")
+    postprocess("../outputs/normative/test/version_3/evaluation_per_subject_connection.csv")

@@ -11,15 +11,17 @@ input_areas: 17
 
 # DATASETS
 dataset_name: ucla
-train_path: "data/processed/data_09_07_2024_compcor/dataset_yeo17thick_2024_07_09_h_train.pkl"
-val_path: "data/processed/data_09_07_2024_compcor/dataset_yeo17thick_2024_07_09_h_test.pkl"
-connectivity_measure_type: "correlation"  # multiple or 'none'. If 'none', the initial time series matrix will be returned
+train_path: "C:\\Important Stuff\\Facultate\\Dizertatie\\fmri_analysis\\data\\processed\\data_09_07_2024_compcor\\dataset_yeo17thick_2024_07_09_h_train.pkl"
+val_path: "C:\\Important Stuff\\Facultate\\Dizertatie\\fmri_analysis\\data\\processed\\data_09_07_2024_compcor\\dataset_yeo17thick_2024_07_09_h_test.pkl"
+connectivity_measure_type: "dtw"  # multiple or 'none'. If 'none', the initial time series matrix will be returned
 edge_threshold: 0.9  # 90% correlation and above is considered  # TODO: nefolosit.
 batch_size: 4
 
 # TRAINER
+lr: 5e-4
+weight_decay: 1e-5
 logger: tensorboard  # csv, tensorboard
-max_epochs: 20000
+max_epochs: 1000
 ckpt_args:
   metric: "val_mse_loss"
   mode: "min"

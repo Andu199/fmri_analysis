@@ -47,7 +47,11 @@ class NormativeModel(L.LightningModule):
         self.log("val_mse_loss", loss)
 
     def configure_optimizers(self):
-        optimizer = torch.optim.Adam(self.model.parameters(), lr=5e-4, eps=1e-7, weight_decay=1e-5)
+        optimizer = torch.optim.Adam(
+            self.model.parameters(),
+            lr=float(self.config["lr"]),
+            weight_decay=float(self.config["weight_decay"]),
+        )
         return [optimizer], []
 
 
