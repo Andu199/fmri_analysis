@@ -21,6 +21,7 @@ batch_size: 4
 lr: 5e-4
 weight_decay: 1e-5
 logger: tensorboard  # csv, tensorboard
+experiment_name: "my_experiment"
 max_epochs: 1000
 ckpt_args:
   metric: "val_mse_loss"

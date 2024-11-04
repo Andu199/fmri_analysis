@@ -6,7 +6,8 @@ from enum import Enum
 BASIC_CONFOUNDS = ["X", "Y", "Z", "RotX", "RotY", "RotZ", "WhiteMatter", "GlobalSignal"]
 DERIVATIVES_OF_BASIC = [con + "_derivative1" for con in BASIC_CONFOUNDS]
 POWER_2_BASIC = [con + "_power2" for con in (BASIC_CONFOUNDS + DERIVATIVES_OF_BASIC)]
-COMPCOR = ["tCompCor00"]
+COMPCOR = ["tCompCor00", "tCompCor01", "tCompCor02", "tCompCor03", "tCompCor04", "tCompCor05",
+           "aCompCor00", "aCompCor01", "aCompCor02", "aCompCor03", "aCompCor04", "aCompCor05"]
 
 CONFOUNDS_DICT = {
     "basic_confounds": BASIC_CONFOUNDS,

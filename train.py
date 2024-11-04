@@ -40,9 +40,9 @@ def init_train(config):
     # LOGGER
     logger_path = os.path.join("outputs", config["model_name"], "logs")
     if config["logger"] == "tensorboard":
-        logger = TensorBoardLogger(logger_path, name="my_experiment")
+        logger = TensorBoardLogger(logger_path, name=config["experiment_name"])
     elif config["logger"] == "csv":
-        logger = CSVLogger(logger_path, name="my_experiment")
+        logger = CSVLogger(logger_path, name=config["experiment_name"])
     else:
         raise ValueError(config["logger"] + " not yer implemented!")
 
@@ -52,7 +52,7 @@ def init_train(config):
         callbacks.append(
             ModelCheckpoint(
                 monitor=config["ckpt_args"]["metric"],
-                dirpath=os.path.join("outputs", config["model_name"], "ckpts"),
+                dirpath=os.path.join("outputs", config["model_name"], "ckpts", config["experiment_name"]),
                 filename='model-{epoch:02d}',
                 mode=config["ckpt_args"]["mode"],
             )
@@ -109,13 +109,15 @@ if __name__ == "__main__":
                                                 "model, data, training process and other auxiliary tools"))
 
     ### SIMPLE TRAIN
-    train(train_config)
+    # train(train_config)
 
     ### GRID SEARCH
-    # # change as it is needed
-    # train_config["weight_decay"] = [0, 1e-5, 1e-4]
-    # train_config["lr"] = [1e-4, 5e-4]
-    # train_config["tune"] = ["weight_decay", "lr"]  # add all keys that have been modified for tuning
-    # train_config["epochs"] = 1
-    #
-    # hparams_tuning(train_config)
+    # change as it is needed
+    for confound_date in ["07_09", "11_02"]:
+        for atlas in ["thick", "thin"]:
+            for connectivity_measure in ["correlation", "dtw", "kendall", "spearman", "pearson"]:
+                train_config["train_path"] = f"C:\\Important Stuff\\Facultate\\Dizertatie\\fmri_analysis\\data\\processed\\data_2024_{confound_date}_{atlas}17\\dataset_yeo17{atlas}_2024_{confound_date}_h_train.pkl"
+                train_config["val_path"] = f"C:\\Important Stuff\\Facultate\\Dizertatie\\fmri_analysis\\data\\processed\\data_2024_{confound_date}_{atlas}17\\dataset_yeo17{atlas}_2024_{confound_date}_h_test.pkl"
+                train_config["connectivity_measure_type"] = connectivity_measure
+                train_config["experiment_name"] = f"{confound_date}_{atlas}_{connectivity_measure}"
+                train(train_config)

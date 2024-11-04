@@ -1,4 +1,6 @@
 import os
+
+import pandas as pd
 from joblib import Parallel, delayed
 
 from DTW_for_fMRI.dtw_connectivity_parallel import dtw
@@ -20,8 +22,20 @@ def compute_similarity_from_distance(dist, other_params=None, sim_type=0):
         raise ValueError("Wrong sim_type")
 
 
+class ConnectivityPandas:
+    def __init__(self, corr_type="pearson"):
+        self.corr_type = corr_type
+
+    def fit_transform(self, x_list):
+        x = x_list[0]
+        x = pd.DataFrame(x)
+        connectivity_matrix = x.corr(self.corr_type)
+
+        return np.array([connectivity_matrix]).astype(np.float32)
+
+
 class ConnectivityDTW:
-    def __init__(self, sim_type=0, window_size=10, lambda_value=None):
+    def __init__(self, sim_type=0, window_size=5, lambda_value=None):
         self.sim_type = sim_type
         self.window_size = window_size
         self.other_params = {
