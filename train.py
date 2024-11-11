@@ -116,8 +116,8 @@ if __name__ == "__main__":
     for confound_date in ["07_09", "11_02"]:
         for atlas in ["thick", "thin"]:
             for connectivity_measure in ["correlation", "dtw", "kendall", "spearman", "pearson"]:
-                train_config["train_path"] = f"C:\\Important Stuff\\Facultate\\Dizertatie\\fmri_analysis\\data\\processed\\data_2024_{confound_date}_{atlas}17\\dataset_yeo17{atlas}_2024_{confound_date}_h_train.pkl"
-                train_config["val_path"] = f"C:\\Important Stuff\\Facultate\\Dizertatie\\fmri_analysis\\data\\processed\\data_2024_{confound_date}_{atlas}17\\dataset_yeo17{atlas}_2024_{confound_date}_h_test.pkl"
+                train_config["train_path"] = f"/home/ubuntu/Dizertatie/fmri_analysis/data/processed/data_2024_{confound_date}_{atlas}17/dataset_yeo17{atlas}_2024_{confound_date}_h_train.pkl"
+                train_config["val_path"] = f"/home/ubuntu/Dizertatie/fmri_analysis/data/processed/data_2024_{confound_date}_{atlas}17/dataset_yeo17{atlas}_2024_{confound_date}_h_test.pkl"
                 train_config["connectivity_measure_type"] = connectivity_measure
                 train_config["experiment_name"] = f"{confound_date}_{atlas}_{connectivity_measure}"
                 train(train_config)

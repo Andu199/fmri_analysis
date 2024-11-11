@@ -15,7 +15,7 @@ train_path: "C:\\Important Stuff\\Facultate\\Dizertatie\\fmri_analysis\\data\\pr
 val_path: "C:\\Important Stuff\\Facultate\\Dizertatie\\fmri_analysis\\data\\processed\\data_09_07_2024_compcor\\dataset_yeo17thick_2024_07_09_h_test.pkl"
 connectivity_measure_type: "dtw"  # multiple or 'none'. If 'none', the initial time series matrix will be returned
 edge_threshold: 0.9  # 90% correlation and above is considered  # TODO: nefolosit.
-batch_size: 4
+batch_size: 32
 
 # TRAINER
 lr: 5e-4

@@ -1,13 +1,13 @@
-input_path: "data\\ds000030"
-output_path: "data\\ds000030\\derivatives"
+input_path: "/home/ubuntu/Dizertatie/fmri_analysis/MRI_Pain"
+output_path: "/home/ubuntu/Dizertatie/fmri_analysis/MRI_Pain/derivatives"
 
-flags:
-  - "low-mem"
+#flags:
+#  - "low-mem"
 
-fs-license-file: "data\\license.txt"
+fs-license-file: "/home/ubuntu/Dizertatie/fmri_analysis/license.txt"
 
 participant_label:
-  - "sub-10159"
+  - "sub-01"
 
 task-id:
   - "rest"

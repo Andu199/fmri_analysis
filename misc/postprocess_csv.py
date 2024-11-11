@@ -62,4 +62,7 @@ def postprocess(path):
 
 
 if __name__ == "__main__":
-    postprocess("../outputs/normative/test/version_3/evaluation_per_subject_connection.csv")
+    for confound_date in ["07_09", "11_02"]:
+        for atlas in ["thick", "thin"]:
+            for connectivity_measure in ["correlation", "dtw", "kendall", "spearman", "pearson"]:
+                postprocess(f"../outputs/normative/test/{confound_date}_{atlas}_{connectivity_measure}/evaluation_per_subject_connection.csv")

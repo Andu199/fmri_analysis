@@ -1,4 +1,5 @@
 import os.path
+import os
 from argparse import ArgumentParser
 
 import numpy as np
@@ -130,10 +131,21 @@ def test(config):
                          for i in range(len(networks)) for j in range(i)]
 
     df.to_csv(os.path.join(config["output_dir"], "evaluation_per_subject_connection.csv"), index=False)
-    plot_reconstructions(per_connection_metric_results, config)
+    # plot_reconstructions(per_connection_metric_results, config)
 
 
 if __name__ == "__main__":
     test_config = config_parser(ArgumentParser("Main testing script. It gets a YAML file with configurations for:"
                                                "model checkpoint, dataset paths, etc."))
-    test(test_config)
+    # test(test_config)
+    for confound_date in ["07_09", "11_02"]:
+        for atlas in ["thick", "thin"]:
+            for connectivity_measure in ["correlation", "dtw", "kendall", "spearman", "pearson"]:
+                model_ckpt = (os.listdir(f"outputs/normative/ckpts/{confound_date}_{atlas}_{connectivity_measure}"))[0]
+                test_config["model_path"] = os.path.join(f"outputs/normative/ckpts/{confound_date}_{atlas}_{connectivity_measure}", model_ckpt)
+                test_config["connectivity_measure_type"] = connectivity_measure
+                test_config["output_dir"] = f"outputs/normative/test/{confound_date}_{atlas}_{connectivity_measure}"
+                test_config["ds_paths"]["healthy"] = f"data/processed/data_2024_{confound_date}_{atlas}17/dataset_yeo17{atlas}_2024_{confound_date}_h_test.pkl"
+                for disorder in ["adhd", "bipolar", "schz"]:
+                    test_config["ds_paths"][disorder] = f"data/processed/data_2024_{confound_date}_{atlas}17/dataset_yeo17{atlas}_2024_{confound_date}_{disorder}_test.pkl"
+                test(test_config)
