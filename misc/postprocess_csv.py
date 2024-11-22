@@ -17,7 +17,7 @@ def plot_boxplots(values, connection, disorder, class_names, path):
 
 def postprocess(path):
     df = pd.read_csv(path)
-    class_names = ["healthy", "schz", "bipolar", "adhd"]
+    class_names = ["healthy", "schz", "bipolar", "adhd", "hpain", "pain"]
     columns = df.columns
     classes_columns = {
         class_name: [column for column in columns if class_name in column]
@@ -48,7 +48,7 @@ def postprocess(path):
     results_total = pd.DataFrame(results_total)
     results_total.to_csv(path_output, index=False)
 
-    disorders = ["schz", "bipolar", "adhd"]
+    disorders = ["schz", "bipolar", "adhd", "hpain", "pain"]  # "hpain", "pain"
     for disorder in disorders:
         abnormal_connections = results_total[results_total[f'healthy_{disorder}'] < 0.05]['connections'].to_list()
         for connection in abnormal_connections:
@@ -62,4 +62,4 @@ def postprocess(path):
 
 
 if __name__ == "__main__":
-    postprocess("../outputs/normative/test/version_3/evaluation_per_subject_connection.csv")
+    postprocess("../outputs/normative/test/version_pain/evaluation_per_subject_connection.csv")

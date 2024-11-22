@@ -31,6 +31,7 @@ def init_test(config):
                 "input_path": path,
                 "connectivity_measure_type": config["connectivity_measure_type"],
                 "edge_threshold": config["edge_threshold"],
+                "class_name": name
             }
             dataset = UCLA_LA5c_Dataset(config_dataset)
             dl = DataLoader(dataset, config["batch_size"], shuffle=False)

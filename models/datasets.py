@@ -7,7 +7,7 @@ from nilearn.connectome import ConnectivityMeasure
 from torch.utils.data import DataLoader
 
 from preprocess.preprocess import Container
-from utils.constants import Diagnostic
+from utils.constants import Diagnostic, STRING_TO_DIAGNOSTIC
 from utils.general_utils import config_parser, ConnectivityDTW, ConnectivityPandas
 
 
@@ -19,6 +19,7 @@ class UCLA_LA5c_Dataset(torch.utils.data.Dataset):
         with open(self.config["input_path"], "rb") as f:
             self.container = pickle.load(f)
 
+        self.class_label = self.config["class_name"] if "class_name" in self.config.keys() else None
         if self.config["connectivity_measure_type"] == 'none':
             self.connectivity_measure = None
         elif self.config["connectivity_measure_type"] == 'correlation':
@@ -39,16 +40,19 @@ class UCLA_LA5c_Dataset(torch.utils.data.Dataset):
         X = self.container.sub_data[self.container.sub_names_list[item]]
         X = self.connectivity_measure.fit_transform([X.astype(np.float32)])[0]
 
-        if self.container.sub_names_list[item][0] == '1':
-            y = Diagnostic.HEALTHY.value
-        elif self.container.sub_names_list[item][0] == '5':
-            y = Diagnostic.SCHZ.value
-        elif self.container.sub_names_list[item][0] == '6':
-            y = Diagnostic.BIPOLAR.value
-        elif self.container.sub_names_list[item][0] == '7':
-            y = Diagnostic.ADHD.value
+        if self.class_label is None:
+            if self.container.sub_names_list[item][0] == '1':
+                y = Diagnostic.HEALTHY.value
+            elif self.container.sub_names_list[item][0] == '5':
+                y = Diagnostic.SCHZ.value
+            elif self.container.sub_names_list[item][0] == '6':
+                y = Diagnostic.BIPOLAR.value
+            elif self.container.sub_names_list[item][0] == '7':
+                y = Diagnostic.ADHD.value
+            else:
+                raise ValueError("Wrong subject id!")
         else:
-            raise ValueError("Wrong subject id!")
+            y = STRING_TO_DIAGNOSTIC[self.class_label].value
 
         return X, y
 

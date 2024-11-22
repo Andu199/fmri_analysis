@@ -38,6 +38,8 @@ class Preprocessor:
                                 task=self.config["task"],
                                 space='MNI152NLin2009cAsym',
                                 suffix='preproc',
+                                # desc="preproc",
+                                # suffix='bold',
                                 extension='nii.gz',
                                 return_type='file')
 
@@ -46,6 +48,8 @@ class Preprocessor:
                                      task=self.config["task"],
                                      space='MNI152NLin2009cAsym',
                                      suffix='brainmask',
+                                     # desc="brain",
+                                     # suffix='mask',
                                      extension='nii.gz',
                                      return_type='file')
 
@@ -53,6 +57,8 @@ class Preprocessor:
                                     datatype='func',
                                     task=self.config["task"],
                                     suffix='confounds',
+                                    # desc="confounds",
+                                    # suffix='timeseries',
                                     extension="tsv",
                                     return_type='file')
 
