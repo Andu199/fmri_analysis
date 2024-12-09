@@ -3,15 +3,19 @@ import os
 
 import pandas as pd
 
+FREQ_THR = 0
+P_THR = 0.05
+
+# Best: 07_09_thin_kendall
+
+
 if __name__ == "__main__":
     confounds_name = ["07_09", "11_02"]
     atlas_name = ["thin", "thick"]
     connectivity_name = ["correlation", "dtw", "kendall", "spearman", "pearson"]
 
     path = "/home/ubuntu/Dizertatie/fmri_analysis/outputs/normative/test"
-    filename = "mannwhitney_test_pvalue.csv"
-
-    p_thr = 0.05
+    filename = "mannwhitney_val_pvalue.csv"
 
     relevant_connections = {}
     freq_connections = {}
@@ -33,7 +37,7 @@ if __name__ == "__main__":
                 for colname in df.columns:
                     if colname == "connections":
                         continue
-                    connection_names = (df[df[colname] <= p_thr])['connections'].to_list()
+                    connection_names = (df[df[colname] <= P_THR])['connections'].to_list()
                     rel_conn.extend(connection_names)
 
                 relevant_connections[experiment_name] = list(set(rel_conn))
@@ -45,7 +49,7 @@ if __name__ == "__main__":
     freq_connections = dict(sorted(freq_connections.items(), key=lambda item: item[1], reverse=True))
 
     for idx, key in enumerate(freq_connections):
-        if freq_connections[key] < 10:  # vary this.
+        if freq_connections[key] < FREQ_THR:  # vary this.
             continue
         score = freq_connections[key]
         for exp in relevant_connections.keys():
@@ -53,7 +57,7 @@ if __name__ == "__main__":
                 scores_experiments[exp] += score
 
     scores_experiments = dict(sorted(scores_experiments.items(), key=lambda item: item[1], reverse=True))
-    with open("best_experiments.json", "w") as f:
+    with open(f"best_experiments_{FREQ_THR}.json", "w") as f:
         json.dump(scores_experiments, f)
 
     with open("freq_vector.json", "w") as f:
