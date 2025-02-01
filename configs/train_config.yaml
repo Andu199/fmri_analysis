@@ -11,13 +11,14 @@ input_areas: 17
 
 # DATASETS
 dataset_name: ucla
-train_path: "C:\\Important Stuff\\Facultate\\Dizertatie\\fmri_analysis\\data\\processed\\data_09_07_2024_compcor\\dataset_yeo17thick_2024_07_09_h_train.pkl"
-val_path: "C:\\Important Stuff\\Facultate\\Dizertatie\\fmri_analysis\\data\\processed\\data_09_07_2024_compcor\\dataset_yeo17thick_2024_07_09_h_test.pkl"
-connectivity_measure_type: "dtw"  # multiple or 'none'. If 'none', the initial time series matrix will be returned
+train_path: "/home/ubuntu/Dizertatie/fmri_analysis/data/processed/data_2024_12_29_thin7/dataset_yeo7thin_2024_12_29_h_train.pkl"
+val_path: "/home/ubuntu/Dizertatie/fmri_analysis/data/processed/data_2024_12_29_thin7/dataset_yeo7thin_2024_12_29_h_test.pkl"
+connectivity_measure_type: "kendall"  # multiple or 'none'. If 'none', the initial time series matrix will be returned
 edge_threshold: 0.9  # 90% correlation and above is considered  # TODO: nefolosit.
 batch_size: 4
 
 # TRAINER
+# fine_tune_path: "/home/ubuntu/Dizertatie/fmri_analysis/outputs/normative/ckpts/07_09_thin_kendall/model-epoch=966.ckpt"
 lr: 5e-4
 weight_decay: 1e-5
 logger: tensorboard  # csv, tensorboard

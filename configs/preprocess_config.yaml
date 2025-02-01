@@ -13,16 +13,16 @@ clean_arguments:
   tr_drop: 4
 
   confounds:  # based on the classification made by fMRIPrep team (https://fmriprep.org/en/stable/outputs.html#confounds)
-  #  - basic_confounds  # 9 parameters, 6 rigid-body + 3 global signals
+    - basic_confounds  # 9 parameters, 6 rigid-body + 3 global signals
   #  - derivatives_of_basic  # derivatives for the basic confounds
   #  - power_2_basic  # power two of the basic + derivatives
   #  - outlier_detection  # TODO: merita folosite.
   #  - cosine_basis
-    - compcor
+  #  - compcor
 
 # Atlas arguments
 atlas_type: yeo
 atlas_args:
   type: "thin_17"
 
-output_path: "../data/processed/data_02_11_2024_thin17/dataset_yeo17thin_2024_11_02_h_train.pkl"
+output_path: "../data/processed/data_2024_12_29_thin7/dataset_yeo7thin_2024_12_29_h_train.pkl"

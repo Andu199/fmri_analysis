@@ -22,14 +22,19 @@ def init_train(config):
     else:
         raise ValueError(config["model_name"] + " not yet implemented!")
 
+    # if "fine_tune_path" in config.keys():
+    #     model = NormativeModel.load_from_checkpoint(config["fine_tune_path"], config=config)
+
     # DATA
     if config["dataset_name"] == "ucla":
         train_config = deepcopy(config)
         train_config["input_path"] = train_config["train_path"]
+        # train_config["class_name"] = "hpain"
         train_dataset = UCLA_LA5c_Dataset(train_config)
 
         val_config = deepcopy(config)
         val_config["input_path"] = val_config["val_path"]
+        # val_config["class_name"] = "hpain"
         val_dataset = UCLA_LA5c_Dataset(val_config)
     else:
         raise ValueError(config["dataset_name"] + " not yet implemented!")
@@ -109,15 +114,15 @@ if __name__ == "__main__":
                                                 "model, data, training process and other auxiliary tools"))
 
     ### SIMPLE TRAIN
-    # train(train_config)
+    train(train_config)
 
     ### GRID SEARCH
     # change as it is needed
-    for confound_date in ["07_09", "11_02"]:
-        for atlas in ["thick", "thin"]:
-            for connectivity_measure in ["correlation", "dtw", "kendall", "spearman", "pearson"]:
-                train_config["train_path"] = f"C:\\Important Stuff\\Facultate\\Dizertatie\\fmri_analysis\\data\\processed\\data_2024_{confound_date}_{atlas}17\\dataset_yeo17{atlas}_2024_{confound_date}_h_train.pkl"
-                train_config["val_path"] = f"C:\\Important Stuff\\Facultate\\Dizertatie\\fmri_analysis\\data\\processed\\data_2024_{confound_date}_{atlas}17\\dataset_yeo17{atlas}_2024_{confound_date}_h_test.pkl"
-                train_config["connectivity_measure_type"] = connectivity_measure
-                train_config["experiment_name"] = f"{confound_date}_{atlas}_{connectivity_measure}"
-                train(train_config)
+    # for confound_date in ["07_09", "11_02"]:
+    #     for atlas in ["thick", "thin"]:
+    #         for connectivity_measure in ["correlation", "dtw", "kendall", "spearman", "pearson"]:
+    #             train_config["train_path"] = f"C:\\Important Stuff\\Facultate\\Dizertatie\\fmri_analysis\\data\\processed\\data_2024_{confound_date}_{atlas}17\\dataset_yeo17{atlas}_2024_{confound_date}_h_train.pkl"
+    #             train_config["val_path"] = f"C:\\Important Stuff\\Facultate\\Dizertatie\\fmri_analysis\\data\\processed\\data_2024_{confound_date}_{atlas}17\\dataset_yeo17{atlas}_2024_{confound_date}_h_test.pkl"
+    #             train_config["connectivity_measure_type"] = connectivity_measure
+    #             train_config["experiment_name"] = f"{confound_date}_{atlas}_{connectivity_measure}"
+    #             train(train_config)

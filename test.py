@@ -17,11 +17,10 @@ from utils.general_utils import config_parser
 
 def init_test(config):
     if config["model_name"] == "normative":
-        model = NormativeModel(config)
+        model = NormativeModel.load_from_checkpoint(config["model_path"], config=config)
+        model.to("cpu")
     else:
         raise ValueError(config["model_name"] + " not yet implemented!")
-    state_dict = torch.load(config["model_path"])["state_dict"]
-    model.load_state_dict(state_dict)
     model.eval()
 
     dataloaders = {}
@@ -127,6 +126,7 @@ def test(config):
     )
     networks = ['vis_1', 'vis_2', 'mot_1', 'mot_2', 'dan_2', 'dan_1', 'van_1', 'fp_1', 'lim_1', 'lim_2', 'fp_2', 'fp_3',
                 'fp_4', 'mot_3', 'dmn_3', 'dmn_1', 'dmn_2']
+    # networks = ['vis', 'mot', 'dan', 'van', 'lim', 'fp', 'dmn']
     df["connections"] = [f"{networks[i]}_{networks[j]}"
                          for i in range(len(networks)) for j in range(i)]
 

@@ -14,7 +14,7 @@ if __name__ == "__main__":
     atlas_name = ["thin", "thick"]
     connectivity_name = ["correlation", "dtw", "kendall", "spearman", "pearson"]
 
-    path = "/home/ubuntu/Dizertatie/fmri_analysis/outputs/normative/test"
+    path = "/outputs/normative_yeo7/test"
     filename = "mannwhitney_val_pvalue.csv"
 
     relevant_connections = {}
