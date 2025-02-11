@@ -5,17 +5,17 @@ import matplotlib.pyplot as plt
 
 np.random.seed(42)
 
-# # Generate x_data: 300 samples, 136 features (mimics UCLA distribution - healty)
-# x_data = np.random.normal(loc=0, scale=1, size=(300, 136))
-#
-# # Generate y_data: 20 samples, 136 features (mimics pain distribution - healty)
-# y_data = np.random.normal(loc=0.2, scale=1, size=(20, 136))
-#
-# # Generate y_new_data: 20 samples, 136 features (mimics pain distribution - pain)
-# y_pain_data = np.random.normal(loc=0.2, scale=1, size=(20, 136))
-# # mofify some features to look like pain data
-# shift_feature_indices = [10, 11, 12, 13]
-# y_pain_data[:, shift_feature_indices] += 0.3
+# Generate x_data: 300 samples, 136 features (mimics UCLA distribution - healty)
+x_data = np.random.normal(loc=0, scale=1, size=(300, 136))
+
+# Generate y_data: 20 samples, 136 features (mimics pain distribution - healty)
+y_data = np.random.normal(loc=0.2, scale=1, size=(20, 136))
+
+# Generate y_new_data: 20 samples, 136 features (mimics pain distribution - pain)
+y_pain_data = np.random.normal(loc=0.2, scale=1, size=(20, 136))
+# mofify some features to look like pain data
+shift_feature_indices = [10, 11, 12, 13]
+y_pain_data[:, shift_feature_indices] += 0.3
 
 #  Align y_data to x_data
 
