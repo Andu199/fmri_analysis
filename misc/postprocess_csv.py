@@ -44,7 +44,7 @@ def clean_df(df, split=None):
 
 def postprocess(path, split):
     df = pd.read_csv(path)
-    class_names = ["healthy", "schz", "bipolar", "adhd"]  # "hpain", "pain"
+    class_names = ["healthy", "schz", "bipolar", "adhd", "hpain", "pain"]  # "hpain", "pain"
     df = clean_df(df, split)
     print(df.columns)
 
@@ -78,7 +78,7 @@ def postprocess(path, split):
     results_total = pd.DataFrame(results_total)
     results_total.to_csv(path_output, index=False)
 
-    disorders = ["schz", "bipolar", "adhd"]  # "hpain", "pain"
+    disorders = ["schz", "bipolar", "adhd", "hpain", "pain"]  # "hpain", "pain"
     for disorder in disorders:
         abnormal_connections = results_total[results_total[f'healthy_{disorder}'] < 0.05]['connections'].to_list()
         for connection in abnormal_connections:
@@ -97,4 +97,4 @@ if __name__ == "__main__":
     #         for corr_name in ['correlation', 'dtw', 'pearson', 'kendall', 'spearman']:
     #             postprocess(f"../outputs/normative/test/{conf_name}_{atlas_name}_{corr_name}/evaluation_per_subject_connection.csv", split="val")
 
-    postprocess(f"../outputs/normative_yeo7/test/version_0/evaluation_per_subject_connection.csv", split="test")
+    postprocess(f"../outputs/normative/test/version_article_pain/evaluation_per_subject_connection.csv", split="test")

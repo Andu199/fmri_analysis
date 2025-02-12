@@ -1,6 +1,6 @@
 # MODEL
 model_name: normative
-model_path: "outputs/normative/ckpts/my_experiment/version_0/model-epoch=980.ckpt"
+model_path: "outputs/normative_first_analysis/ckpts/07_09_thin_kendall/model-epoch=966.ckpt"
 fc_hidden_size:
   - 68  # ~136 / 2; (17**2 - 17) / 2 = 136
   - 23  # ~68 / 3
@@ -17,8 +17,8 @@ ds_paths:
   schz: "/home/ubuntu/Dizertatie/fmri_analysis/data/processed/data_2024_07_09_thick17/dataset_yeo17thick_2024_07_09_schz_test.pkl"
   bipolar: "/home/ubuntu/Dizertatie/fmri_analysis/data/processed/data_2024_07_09_thick17/dataset_yeo17thick_2024_07_09_bipolar_test.pkl"
   adhd: "/home/ubuntu/Dizertatie/fmri_analysis/data/processed/data_2024_07_09_thick17/dataset_yeo17thick_2024_07_09_adhd_test.pkl"
-  hpain: "/home/ubuntu/Dizertatie/fmri_analysis/data/processed/data_2024_11_11_thick17/dataset_yeo17thin_2024_11_11_hpain_test.pkl"
-  pain: "/home/ubuntu/Dizertatie/fmri_analysis/data/processed/data_2024_11_11_thick17/dataset_yeo17thin_2024_11_11_pain_test.pkl"
+  hpain: "/home/ubuntu/Dizertatie/fmri_analysis/data/processed/data_2024_11_28_thin17/full/dataset_yeo17thin_2024_11_28_hpain_test.pkl"
+  pain: "/home/ubuntu/Dizertatie/fmri_analysis/data/processed/data_2024_11_28_thin17/dataset_yeo17thin_2024_11_28_pain_test.pkl"
 
 dataset_name: "ucla"
 connectivity_measure_type: "kendall"  # multiple or 'none'. If 'none', the initial time series matrix will be returned
@@ -26,4 +26,4 @@ edge_threshold: 0.9  # 90% correlation and above is considered  # TODO: nefolosi
 batch_size: 1
 
 metric: "mae"
-output_dir: "outputs/normative/test/version_0/"
+output_dir: "outputs/normative/test/version_article_pain/"
